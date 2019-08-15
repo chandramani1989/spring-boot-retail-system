@@ -21,4 +21,6 @@ public interface ItemsServices {
 
 	Optional<Items> findById(Integer itemId);
 
+	void delete(Items items);
+
 }

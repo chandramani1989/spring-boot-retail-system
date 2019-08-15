@@ -1,6 +1,7 @@
 package com.chandra.retail.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +44,12 @@ public class RetailController {
 		int pageSize = 10;
 		Pageable pageable = PageRequest.of(pageNo, pageSize);
 		Page<Items> pagableItems = itemsServices.findAll(pageable);
+		List<Items> listItem = pagableItems.getContent();
+		listItem.forEach(e -> {
+			if(e.getQuantity() <=0) {
+				e.setAvailability(false);
+			}
+		});
 		Map<String,Object> map = new HashMap<>();
 		map.put("totalPages", pagableItems.getTotalPages());
 		map.put("totalElement", pagableItems.getTotalElements());
@@ -53,11 +61,11 @@ public class RetailController {
 	
 	@GetMapping("/items/{id}")  // item by id
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	public ResponseEntity<Items> getEmployeeById(@PathVariable(value = "id") Integer itemId)
+	public ResponseEntity<Items> getItemById(@PathVariable(value = "id") Integer itemId)
 			throws ResourceNotFoundException {
-		Items employee = itemsServices.findById(itemId)
+		Items item = itemsServices.findById(itemId)
 				.orElseThrow(() -> new ResourceNotFoundException("Item not found for this id :: " + itemId));
-		return ResponseEntity.ok().body(employee);
+		return ResponseEntity.ok().body(item);
 	}
 	
 	@PostMapping("/items") // create item
@@ -80,6 +88,20 @@ public class RetailController {
 		final Items updatedItems = itemsServices.save(items);
 		return ResponseEntity.ok(updatedItems);
 	}
+	
+	@DeleteMapping("/items/{id}") // delete items
+	@PreAuthorize("hasRole('ADMIN')")
+	public Map<String, Boolean> deleteItems(@PathVariable(value = "id") Integer itemId)
+			throws ResourceNotFoundException {
+		Items items = itemsServices.findById(itemId)
+				.orElseThrow(() -> new ResourceNotFoundException("Items not found for this id :: " + itemId));
+
+		itemsServices.delete(items);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
+	
 	
 	
 }

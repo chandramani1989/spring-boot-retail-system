@@ -24,19 +24,22 @@ public class ItemServiceImpl implements ItemsServices {
 
 	@Override
 	public Page<Items> findAll(Pageable pageable) {
-		
 		return itemsRepository.findAll(pageable);
 	}
 
 	@Override
 	public Items save(@Valid Items items) {
-		
 		return itemsRepository.save(items);
 	}
 
 	@Override
 	public Optional<Items> findById(Integer itemId) {
 		return itemsRepository.findById(itemId);
+	}
+
+	@Override
+	public void delete(Items items) {
+		itemsRepository.delete(items);
 	}
 
 }

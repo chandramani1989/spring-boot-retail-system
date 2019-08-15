@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -46,6 +47,9 @@ public class Items implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "Create_Date", nullable = false)
 	private Date createDate = new Date();
+	
+	@Transient
+	private boolean availability = true;
 
 	public Integer getId() {
 		return id;
@@ -87,4 +91,12 @@ public class Items implements Serializable {
 		this.createDate = createDate;
 	}
 
+	public boolean isAvailability() {
+		return availability;
+	}
+
+	public void setAvailability(boolean availability) {
+		this.availability = availability;
+	}
+	
 }
