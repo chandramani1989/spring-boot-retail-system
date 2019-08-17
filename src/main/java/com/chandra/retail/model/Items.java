@@ -50,6 +50,20 @@ public class Items implements Serializable {
 	
 	@Transient
 	private boolean availability = true;
+	
+	
+
+	public Items() {
+		
+	}
+
+	public Items(@NotNull(message = "Item name is required.") String name,
+			@NotNull(message = "Item price is required.") Double price,
+			@NotNull(message = "Item quantity is required.") Integer quantity) {
+		this.name = name;
+		this.price = price;
+		this.quantity = quantity;
+	}
 
 	public Integer getId() {
 		return id;

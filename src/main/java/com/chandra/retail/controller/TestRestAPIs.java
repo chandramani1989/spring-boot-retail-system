@@ -1,7 +1,6 @@
 package com.chandra.retail.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +17,7 @@ public class TestRestAPIs {
 	@GetMapping("/api/test/pm")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public String projectManagementAccess() {
-		return ">>> Board Management Project";
+		return ">>> Retail Product Management";
 	}
 
 	@GetMapping("/api/test/admin")
